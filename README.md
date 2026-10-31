@@ -22,7 +22,10 @@ ShieldTrace helps you **notice** when things change on your phone: code edits, s
 | **Tool arsenal** | Menu wrapper for `nmap`, `dig`, `whois`, `openssl`, `curl`, `nc`, etc. |
 
 ---
-
+### V2.0 Advanced Features
+- **Stealth Mode:** The guardian process is masked as `android.system.sync` to avoid detection.
+- **Dead Man's Switch:** Periodic heartbeats are sent via ntfy. If the guardian is killed, the heartbeat stops, alerting you.
+- 
 ## What it does NOT do
 
 - **It does not prevent malware.** It can only detect some changes after the fact.

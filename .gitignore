@@ -1,0 +1,17 @@
+evidence/
+checkpoints/
+*.jsonl
+*.pid
+*.pid.stale.*
+*.log
+*.tmp
+*.tmp.*
+__pycache__/
+*.pyc
+*.pyo
+*.swp
+.DS_Store
+termux-api.apk
+shieldtrace_fixed_*.tar.gz
+*.bak
+.accepted_old.*

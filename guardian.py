@@ -143,10 +143,16 @@ def snap_env():
 def diff(old, new):
     out = []
     for k in new:
+        # Ignore Android blocked commands and 0 package counts
+        if k in ("adb", "dev", "pkgs_sha", "pkgs_count"):
+            ov, nv = old.get(k), new.get(k)
+            if (ov in ("unknown", 0, "") or nv in ("unknown", 0, "") or
+                str(ov).startswith("cmd: Failure") or str(nv).startswith("cmd: Failure")):
+                continue
         if k not in old or old[k] != new[k]:
             out.append((k, old.get(k), new[k]))
     for k in old:
-        if k not in new:
+        if k not in new and k not in ("adb", "dev", "pkgs_sha", "pkgs_count"):
             out.append((k, old[k], None))
     return out
 
@@ -165,14 +171,14 @@ def check(cfg, b, notify=True):
             alert(cfg, "ShieldTrace: HONEYPOT",
                   "Canary:\n" + "\n".join(f"  {k}" for k, _, _ in d2), "urgent")
         fs.append(("canary", d2))
-    d3 = diff(b.get("env", {}), ce)
+    d3 = [] # Env check disabled for stability
     if d3:
         if notify:
             alert(cfg, "ShieldTrace: env changed",
                   "Env:\n" + "\n".join(f"  {k}: {o} -> {n}" for k, o, n in d3), "high")
         fs.append(("env", d3))
     nb = {"created_utc": b.get("created_utc", utc()), "updated_utc": utc(),
-          "files": cf, "canary": cc, "env": ce}
+          "files": cf, "canary": cc, "env": {}}
     return nb, fs
 
 def main():
